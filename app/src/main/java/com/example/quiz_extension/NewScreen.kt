@@ -28,67 +28,66 @@ import com.example.quiz_extension.data.Record
 
 @Composable
 fun FinalScreen(
-    viewModel: ResultsViewModel,
-    allUserScores: List<Record>,
+
 ) {
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.saveUserScore(
-            userName = viewModel.name, score = viewModel.correctAnswers
-        )
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .background(Color.Cyan),
-    ) {
-        Text(
-            text = "Results",
-            modifier = Modifier.padding(16.dp),
-            textAlign = TextAlign.Center,
-            style = TextStyle(
-                color = Color.Black,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            )
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Text(text = "Name", fontSize = 28.sp,modifier = Modifier.padding(16.dp))
-            Text(text = "Correct Answers", fontSize = 28.sp,modifier = Modifier.padding(16.dp))
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        LazyColumn {
-            items(allUserScores.size) { i ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.White),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = allUserScores[i].name,
-                        modifier = Modifier.padding(16.dp),
-                        fontSize = 24.sp
-                    )
-                    Text(
-                        text = "${allUserScores[i].correctAnswers}",
-                        modifier = Modifier.padding(16.dp),
-                        fontSize = 24.sp
-                    )
-                }
-            }
-        }
-    }
+//    LaunchedEffect(key1 = Unit) {
+//        viewModel.saveUserScore(
+//            userName = viewModel.name, score = viewModel.correctAnswers
+//        )
+//    }
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(16.dp)
+//            .background(Color.Cyan),
+//    ) {
+//        Text(
+//            text = "Results",
+//            modifier = Modifier.padding(16.dp),
+//            textAlign = TextAlign.Center,
+//            style = TextStyle(
+//                color = Color.Black,
+//                fontSize = 30.sp,
+//                fontWeight = FontWeight.Bold
+//            )
+//        )
+//
+//        Spacer(modifier = Modifier.height(16.dp))
+//
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.spacedBy(10.dp)
+//        ) {
+//            Text(text = "Name", fontSize = 28.sp,modifier = Modifier.padding(16.dp))
+//            Text(text = "Correct Answers", fontSize = 28.sp,modifier = Modifier.padding(16.dp))
+//        }
+//
+//        Spacer(modifier = Modifier.height(16.dp))
+//
+//
+//        LazyColumn {
+//            items(allUserScores.size) { i ->
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .background(Color.White),
+//                    horizontalArrangement = Arrangement.Center,
+//                    verticalAlignment = Alignment.CenterVertically,
+//                ) {
+//                    Text(
+//                        text = allUserScores[i].name,
+//                        modifier = Modifier.padding(16.dp),
+//                        fontSize = 24.sp
+//                    )
+//                    Text(
+//                        text = "${allUserScores[i].correctAnswers}",
+//                        modifier = Modifier.padding(16.dp),
+//                        fontSize = 24.sp
+//                    )
+//                }
+//            }
+//        }
+//    }
 }
 

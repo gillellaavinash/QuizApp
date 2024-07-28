@@ -1,38 +1,35 @@
 package com.example.quiz_extension
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.quiz_extension.data.Record
+import androidx.navigation.navArgument
 
 
 @Composable
 fun Navigation(
-    navController: NavHostController = rememberNavController(),
     viewModel: ResultsViewModel,
-    allUserScores: List<Record>,
 ){
-
+    val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home"){
         composable("home"){
             HomeScreen(navController = navController,
                 viewModel = viewModel
             )
         }
-        composable("quiz") {
-            QuizScreen(navController = navController, questions = easy_list,
-                viewModel = viewModel
+        composable("quiz/{amount}",
+            arguments = listOf(
+                navArgument("amount")
+                { type = NavType.IntType }
             )
-        }
-        composable("last_screen") {
-            FinalScreen(
+        ) { backStackEntry ->
+            QuestionScreen(navController = navController,
                 viewModel = viewModel,
-                allUserScores = allUserScores
+                backStackEntry = backStackEntry
             )
         }
-
     }
 }
 

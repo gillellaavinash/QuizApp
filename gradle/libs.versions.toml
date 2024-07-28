@@ -1,5 +1,5 @@
 [versions]
-agp = "8.4.0-alpha13"
+agp = "8.4.2"
 jetbrainsAnnotationsJava5 = "15.0"
 kotlin = "1.9.0"
 coreKtx = "1.12.0"
@@ -17,6 +17,7 @@ roomKtx = "2.6.1"
 appcompat = "1.6.1"
 material3Android = "1.2.1"
 lifecycleRuntimeCompose = "2.7.0"
+runtimeLivedata = "1.6.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,6 +45,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 org-jetbrains-annotations-java5 = { module = "org.jetbrains:annotations-java5", version.ref = "jetbrainsAnnotationsJava5" }
+androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

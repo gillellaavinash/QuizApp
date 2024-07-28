@@ -16,38 +16,13 @@ import com.example.quiz_extension.data.RecordRepository
 import com.example.quiz_extension.ui.theme.Quiz_ExtensionTheme
 
 class MainActivity : ComponentActivity() {
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val viewModel = ViewModelProvider(this)[ResultsViewModel::class.java]
         setContent {
             Quiz_ExtensionTheme {
-
-                val appContext = LocalContext.current.applicationContext
-                val db = Room.databaseBuilder(
-                    appContext,
-                    RecordDatabase::class.java, "record_database.db"
-                ).build()
-                val userScoreDao = db.recordDao()
-                val repository = RecordRepository(userScoreDao)
-
-                val viewModel by viewModels<ResultsViewModel>(
-                    factoryProducer = {
-                        object : ViewModelProvider.Factory {
-                            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                                return ResultsViewModel(repository = repository) as T
-                            }
-                        }
-                    }
-                )
-
-                val allUserScores by viewModel.getAllRecords.collectAsState(initial = emptyList())
-                Navigation(
-                    viewModel = viewModel,
-                    allUserScores = allUserScores
-                )
+                Navigation(viewModel)
             }
         }
     }

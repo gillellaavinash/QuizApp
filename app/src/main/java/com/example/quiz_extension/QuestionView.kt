@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,20 +25,54 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import com.example.currencycon.api.NetworkResponse
+import com.example.currencycon.api.Trivia
+import kotlin.random.Random
+import kotlin.reflect.KProperty
 
 @Composable
-fun QuizScreen(
-    questions: List<Easy>,
-    navController: NavHostController,
+fun QuestionScreen(
     viewModel: ResultsViewModel,
-){
+    navController: NavHostController,
+    backStackEntry: NavBackStackEntry,
+) {
+    val count = backStackEntry.arguments?.getInt("amount")
+    val trivia = viewModel.triviaResult.observeAsState()
+    Column(
+         modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        when(val result = trivia.value){
+            is NetworkResponse.Error -> {
+                Text(text = result.message)
+            }
+            NetworkResponse.Loading -> {
+                CircularProgressIndicator()
+            }
+            is NetworkResponse.Success -> {
+                //Text(text = "${result.data}")
+                if (count != null) {
+                    QuizScreen(data = result.data,count = count,navController)
+                }
+            }
+            null -> {
+                Text(text = "Enter City")
+            }
+        }
+    }
+}
 
+
+@Composable
+fun QuizScreen(data: Trivia, count: Int, navController: NavHostController) {
     var currentQuestion by remember { mutableIntStateOf(0) } // Track current question index
     var score by remember { mutableIntStateOf(0) }
 
-
-    var question = questions[currentQuestion]
+    var question = data.results[currentQuestion]
 
     val brush = Brush.linearGradient(
         colors = listOf(Color.Red,
@@ -48,13 +84,21 @@ fun QuizScreen(
             )
     )
 
+    val list = listOf(
+        data.results[currentQuestion].correct_answer,
+        data.results[currentQuestion].incorrect_answers[0],
+        data.results[currentQuestion].incorrect_answers[1],
+        data.results[currentQuestion].incorrect_answers[2]
+    )
+    val listOptions = list
+    val correctAnswer = data.results[currentQuestion].correct_answer
     Column(
         modifier = Modifier.fillMaxSize()
             .background(brush),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(25.dp)
     ){
-        Text(text = questions[currentQuestion].question,
+        Text(text = data.results[currentQuestion].question,
             modifier = Modifier
                 .padding(45.dp),
             fontSize = 26.sp)
@@ -74,7 +118,7 @@ fun QuizScreen(
             }
             Button(
                 onClick = {
-                    if (question.answer == 1) {
+                    if (list[0] == correctAnswer) {
                         score++
                         color1 = Color.Green
                     }else{
@@ -101,14 +145,16 @@ fun QuizScreen(
                 ),
                 )
             {
-                Text(text = question.options[0],
+                Text(
+                    text = list[0],
                     fontSize = 24.sp,
-                    color = Color.Blue)
+                    color = Color.Blue
+                )
             }
 
         Button(
             onClick = {
-                if (question.answer == 2) {
+                if (list[1] == correctAnswer) {
                     score++
                     color2 = Color.Green
                 }else{
@@ -135,14 +181,15 @@ fun QuizScreen(
             ),
         )
         {
-            Text(text = question.options[1],
+            Text(
+                text = list[1],
                 fontSize = 24.sp,
                 color = Color.Blue
             )
         }
         Button(
             onClick = {
-                if (question.answer == 3) {
+                if (list[2] == correctAnswer) {
                     score++
                     color3 = Color.Green
                 }else{
@@ -169,13 +216,15 @@ fun QuizScreen(
             ),
         )
         {
-            Text(text = question.options[2],
+            Text(
+                text = list[2],
                 fontSize = 24.sp,
-                color = Color.Blue)
+                color = Color.Blue
+            )
         }
         Button(
             onClick = {
-                if (question.answer == 4) {
+                if (listOptions[3] == correctAnswer) {
                     score++
                     color4 = Color.Green
                 }else{
@@ -202,7 +251,7 @@ fun QuizScreen(
             ),
         )
         {
-            Text(text = question.options[3],
+            Text(text = listOptions[3],
                 fontSize = 24.sp,
                 color = Color.Blue
             )
@@ -210,7 +259,7 @@ fun QuizScreen(
         //}
             Spacer(modifier = Modifier.height(80.dp))
 
-            if (currentQuestion < questions.size - 1){
+            if (currentQuestion < count - 1){
                 Button(onClick = { currentQuestion++ 
                     color1 = Color.White
                     color2 = Color.White
@@ -222,10 +271,10 @@ fun QuizScreen(
                         color = Color.Black
                         )
                 }
-                question = questions[currentQuestion]
+                //question = questions[currentQuestion]
             }else{
                 Button(onClick = {
-                    viewModel.correctAnswers = score
+                   // viewModel = score
                     navController.navigate("last_screen")
                 }) {
                     Text(text = "Finish",
@@ -237,6 +286,7 @@ fun QuizScreen(
     }
 
 }
+
 
 
 
